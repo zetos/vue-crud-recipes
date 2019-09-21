@@ -21,24 +21,13 @@
 </template>
 
 <script>
+import db from '@/firebase/init';
+
 export default {
   name: 'Home',
   data() {
     return {
-      recipes: [
-        {
-          title: 'Pan Galatic Gargle Blaster',
-          slug: 'pan-galatic',
-          ingredients: ['lemon', '42', 'gold brick'],
-          id: '1'
-        },
-        {
-          title: 'The Chore',
-          slug: 'the-chore',
-          ingredients: ['vodka', 'dishwater'],
-          id: '2'
-        }
-      ]
+      recipes: []
     };
   },
   methods: {
@@ -47,6 +36,17 @@ export default {
         return recipe.id !== id;
       });
     }
+  },
+  created() {
+    // fetch data from firestore
+    db.collection('recipes')
+      .get()
+      .then(snapshot => {
+        snapshot.forEach(doc => {
+          const id = doc.id;
+          this.recipes.push({ ...doc.data(), id });
+        });
+      });
   }
 };
 </script>
