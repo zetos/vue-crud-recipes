@@ -1,18 +1,66 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js App" />
+  <div class="home container">
+    <div class="card" v-for="recipe in recipes" :key="recipe.id">
+      <div class="card-content">
+        <h2 class="indigo-text">
+          {{ recipe.title }}
+        </h2>
+        <ul class="ingredients">
+          <li v-for="(ingredient, index) in recipe.ingredients" :key="index">
+            <span class="chip">
+              {{ ingredient }}
+            </span>
+          </li>
+        </ul>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from "@/components/HelloWorld.vue";
-
 export default {
-  name: "home",
-  components: {
-    HelloWorld
+  name: 'Home',
+  data() {
+    return {
+      recipes: [
+        {
+          title: 'Pan Galatic Gargle Blaster',
+          slug: 'pan-galatic',
+          ingredients: ['lemon', '42', 'gold brick'],
+          id: '1'
+        },
+        {
+          title: 'The Chore',
+          slug: 'the-chore',
+          ingredients: ['vodka', 'dishwater'],
+          id: '2'
+        }
+      ]
+    };
   }
 };
 </script>
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style>
+.home {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-gap: 30px;
+  margin-top: 60px;
+}
+
+.home h2 {
+  font-size: 1.8em;
+  text-align: center;
+  margin-top: 0;
+}
+
+.home .ingredients {
+  margin: 30px auto;
+}
+
+.home .ingredients li {
+  display: inline-block;
+}
+</style>
