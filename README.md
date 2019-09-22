@@ -1,5 +1,9 @@
 # vue-crud-recipes
 
+Create, edit and delete recipes.
+
+> **WARNING**: This is a simple poc using [Cloud Firestore](https://firebase.google.com/docs/firestore) just to test CRUD operations. It contains a very minimalistic implementation of CRUD operations and should not be used as example for real aplications, it relies on the client cooperation for testing the `where` query by not creating two recipes with the same title.
+
 ## Project setup
 ```
 npm install
@@ -14,16 +18,3 @@ npm run serve
 ```
 npm run build
 ```
-
-### Run your tests
-```
-npm run test
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
