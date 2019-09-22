@@ -6,6 +6,10 @@
         <label for="title">Recipe Title:</label>
         <input type="text" name="title" v-model="title" />
       </div>
+      <div v-for="(ingredient, index) in ingredients" :key="index">
+        <label for="ingredient">Ingredient:</label>
+        <input type="text" name="ingredient" v-model="ingredients[index]" />
+      </div>
       <div class="field add-ingredient">
         <label for="add-ingredient">Recipe Ingredients:</label>
         <input
@@ -24,6 +28,9 @@
 </template>
 
 <script>
+import slugify from 'slugify';
+import db from '@/firebase/init';
+
 export default {
   name: 'AddRecipe',
   data() {
@@ -36,12 +43,33 @@ export default {
   },
   methods: {
     addRecipe() {
-      console.log(this);
+      if (this.title && this.ingredients.length) {
+        this.feedback = null;
+        const newRecipe = {
+          title: this.title,
+          ingredients: this.ingredients,
+          slug: slugify(this.title, {
+            replacement: '-',
+            remove: /[$*_+~.()'"!\-:@]/g,
+            lower: true
+          })
+        };
+
+        db.collection('recipes')
+          .add(newRecipe)
+          .then(() => {
+            this.$router.push({ name: 'home' });
+          })
+          .catch(err => {
+            console.error(err);
+          });
+      } else {
+        this.feedback = 'A recipe must have a title and ingredient(s)';
+      }
     },
     addIngredient() {
       if (this.another) {
         this.ingredients.push(this.another);
-        console.log('ing:', this.ingredients);
         this.another = null;
         this.feedback = null;
       } else {
