@@ -39,6 +39,7 @@
 </template>
 
 <script>
+import slugify from 'slugify';
 import db from '@/firebase/init';
 
 export default {
@@ -52,7 +53,30 @@ export default {
   },
   methods: {
     editRecipe() {
-      console.log('recipe:', this.recipe);
+      if (this.recipe.title && this.recipe.ingredients.length) {
+        this.feedback = null;
+        const newRecipe = {
+          title: this.recipe.title,
+          ingredients: this.recipe.ingredients,
+          slug: slugify(this.recipe.title, {
+            replacement: '-',
+            remove: /[$*_+~.()'"!\-:@]/g,
+            lower: true
+          })
+        };
+
+        db.collection('recipes')
+          .doc(this.recipe.id)
+          .update(newRecipe)
+          .then(() => {
+            this.$router.push({ name: 'home' });
+          })
+          .catch(err => {
+            console.error(err);
+          });
+      } else {
+        this.feedback = 'A recipe must have a title and ingredient(s)';
+      }
     },
     addIngredient() {
       if (this.another) {
